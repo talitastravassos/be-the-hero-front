@@ -1,6 +1,7 @@
+import axios from 'axios';
 import React, { FormEvent, useState } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import logoImg from '../../assets/logo.svg';
 import './styles.scss';
 
@@ -11,10 +12,30 @@ export default function Register() {
   const [city, setCity] = useState('');
   const [uf, setUf] = useState('');
 
-  const handleRegister = (event: FormEvent<HTMLFormElement>) => {
+  const history = useHistory();
+
+  const handleRegister = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    const data = {
+      name,
+      email,
+      whatsapp,
+      city,
+      uf,
+    };
+
+    try {
+      const response = await axios.post('http://localhost:4000/ongs', data);
+
+      alert(`Seu ID de acesso: ${response.data.id}`);
+
+      history.push('/');
+    } catch (error) {
+      alert('Erro no cadastro, tente novamente');
+    }
   }
+
   return (
     <div className="register-container">
       <div className="content">
