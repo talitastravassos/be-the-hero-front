@@ -34,48 +34,48 @@ export default function NewIncident() {
     } catch (error) {
       alert('Erro ao cadastrar caso, tente novamente.');
     }
-  }
+  };
 
   return (
-    <div className="new-incident-container">
-      <div className="content">
+    <div className='new-incident-container'>
+      <div className='content'>
         <section>
-          <img src={logoImg} alt="Be The Hero" />
+          <img src={logoImg} alt='Be The Hero' />
 
           <h1>Cadastrar novo caso</h1>
           <p>
             Descreva o caso detalhadamente para encontrar um herói para resolver
             isso.
-        </p>
+					</p>
 
-          <Link className="back-link" to="/profile">
-            <FiArrowLeft size={16} color="#E02041" />
-            Voltar para home
-          </Link>
+          <Link className='back-link' to='/profile'>
+            <FiArrowLeft size={16} color='#E02041' />
+						Voltar para home
+					</Link>
         </section>
 
         <form onSubmit={handleNewIncident}>
           <input
             value={title}
-            onChange={e => setTitle(e.target.value)}
-            placeholder="Título do caso"
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder='Título do caso'
           />
           <textarea
             value={description}
-            onChange={e => setDescription(e.target.value)}
-            placeholder="Descrição"
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder='Descrição'
           />
           <input
             value={value}
-            onChange={e => setValue(e.target.value)}
-            placeholder="Valor em reais"
+            onChange={(e) => setValue(e.target.value)}
+            placeholder='Valor em reais'
           />
 
-          <button className="button" type="submit">
+          <button className='button' type='submit'>
             Cadastrar
-          </button>
+					</button>
         </form>
       </div>
     </div>
-  )
+  );
 }
