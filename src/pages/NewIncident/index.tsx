@@ -1,4 +1,4 @@
-
+import axios from 'axios';
 import React, { FormEvent, useState } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
 import { Link, useHistory } from 'react-router-dom';
@@ -14,8 +14,26 @@ export default function NewIncident() {
 
   const ongId = localStorage.getItem('ongId');
 
-  const handleNewIncident = (event: FormEvent<HTMLFormElement>) => {
+  const handleNewIncident = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    const data = {
+      title,
+      description,
+      value,
+    };
+
+    try {
+      await axios.post('http://localhost:4000/incidents', data, {
+        headers: {
+          Authorization: ongId,
+        },
+      });
+
+      history.push('/profile');
+    } catch (error) {
+      alert('Erro ao cadastrar caso, tente novamente.');
+    }
   }
 
   return (
