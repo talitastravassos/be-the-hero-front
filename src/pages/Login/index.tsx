@@ -1,30 +1,32 @@
-import axios from 'axios';
 import React, { FormEvent, useState } from 'react';
 import { FiLogIn } from 'react-icons/fi';
 import { Link, useHistory } from 'react-router-dom';
 import heroesImg from '../../assets/heroes.png';
 import logo from '../../assets/logo.svg';
+import { OngsContext } from '../../Context/OngsContext';
 import './styles.scss';
 
 export default function Login() {
+
+  const {
+    action: { login },
+  } = React.useContext(OngsContext); // context api
+
   const [id, setId] = useState('');
   const history = useHistory();
+
+  // React.useEffect(() => {
+  //   test()
+  // }, [])
 
   const handleLogin = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    try {
-      const response = await axios.post('http://localhost:4000/login', {
-        id,
-      });
-
-      localStorage.setItem('ongId', id);
-      localStorage.setItem('ongName', response.data.name);
-
-      history.push('/profile');
-    } catch (error) {
-      alert('Falha no login, tente novamente');
-    }
+    login(id).then(res => {
+      if (res === undefined) {
+        history.push('/profile');
+      }
+    })
   };
 
   return (

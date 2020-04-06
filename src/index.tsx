@@ -1,12 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
+import OngsProvider from './Context/OngsContext';
 import './index.scss';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <OngsProvider>
+      <App />
+    </OngsProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
