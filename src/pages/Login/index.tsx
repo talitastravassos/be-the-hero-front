@@ -7,12 +7,11 @@ import { OngsContext } from '../../Context/OngsContext';
 import './styles.scss';
 
 export default function Login() {
-
   const {
     action: { login },
   } = React.useContext(OngsContext); // context api
 
-  const [id, setId] = useState('');
+  const [id, setId] = useState('bf8a6086ac');
   const history = useHistory();
 
   const handleLogin = async (event: FormEvent<HTMLFormElement>) => {
@@ -20,7 +19,7 @@ export default function Login() {
 
     login(id).then(res => {
       if (res === undefined) {
-        history.push('/profile');
+        history.push('/');
       }
     })
   };

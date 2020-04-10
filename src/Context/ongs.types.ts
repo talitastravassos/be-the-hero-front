@@ -16,14 +16,14 @@ export const initialOng = {
 }
 
 export interface Incident {
-  id?: Number;
+  id?: number;
   title: string;
   description: string;
-  value: string;
+  value: number;
 }
 
 export const initialIncident = {
   title: '',
   description: '',
-  value: ''
+  value: 0
 }

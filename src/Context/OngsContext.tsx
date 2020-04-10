@@ -12,18 +12,18 @@ interface State {
 interface IContext {
   state: State;
   action: {
-    test(): void;
     login(id: string): Promise<any>;
     register(data: Ong): Promise<any>;
+    logout(): void;
     addIncident(incident: Incident): Promise<any>;
+    deleteIncident(id: number): Promise<void>;
+    getIncidentsByONG(): Promise<void>;
   };
 }
 
 // const base_url = 'http://localhost:4000/'; //rest api url
 
-export const OngsContext = React.createContext({} as IContext); // create context
-
-// class with the data and operations stored in context api that the application will consume
+export const OngsContext = React.createContext({} as IContext);
 export default class OngsProvider extends React.Component<{}, State> {
   constructor(props: any) {
     super(props);
@@ -34,22 +34,22 @@ export default class OngsProvider extends React.Component<{}, State> {
     };
   }
 
-  test = () => {
-    console.log('context working');
-  };
-
   login = async (id: string): Promise<void> => {
     try {
       const response = await axios.post('http://localhost:4000/login', {
         id,
       });
 
-      localStorage.setItem('ongId', id);
-      localStorage.setItem('ongName', response.data.name);
+      console.log(response);
 
+      this.setState({
+        currentOng: response.data,
+      });
+
+      localStorage.setItem('ongId', id);
     } catch (error) {
       alert('Falha no login, tente novamente');
-      return error
+      return error;
     }
   };
 
@@ -59,39 +59,92 @@ export default class OngsProvider extends React.Component<{}, State> {
 
       alert(`Seu ID de acesso: ${response.data.id}`);
 
-      // history.push('/');
     } catch (error) {
       alert('Erro no cadastro, tente novamente');
-      return error
+      return error;
     }
+  };
+
+  logout = () => {
+    localStorage.removeItem('ongId')
+    this.setState({
+      currentOng: initialOng
+    }, () => console.log(this.state.currentOng))
   }
 
   addIncident = async (incident: Incident): Promise<void> => {
-    const ongId = localStorage.getItem('ongId');
+    const { id } = this.state.currentOng;
 
     try {
       await axios.post('http://localhost:4000/incidents', incident, {
         headers: {
-          Authorization: ongId,
+          Authorization: id,
         },
       });
     } catch (error) {
       alert('Erro ao cadastrar caso, tente novamente.');
+      return error;
+    }
+  };
+
+  deleteIncident = async (idIncident: number): Promise<void> => {
+    const { id } = this.state.currentOng;
+
+    try {
+      await axios.delete(`http://localhost:4000/incidents/${idIncident}`, {
+        headers: {
+          Authorization: id,
+        },
+      });
+    } catch (error) {
+      alert('Erro ao deletar caso, tente novamente');
       return error
     }
-  }
+  };
 
-  componentDidMount() { }
+  getIncidentsByONG = async (): Promise<void> => {
+    const { id } = this.state.currentOng;
+
+    try {
+      const response = await axios.get(
+        'http://localhost:4000/profile/incidents',
+        {
+          headers: {
+            Authorization: id,
+          },
+        }
+      );
+      this.setState({
+        incidents: response.data.data,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  componentDidMount() {
+    const loggedIn = localStorage.getItem('ongId');
+
+    if (loggedIn) {
+      this.login(loggedIn).then(res => {
+        if (res === undefined) {
+          this.getIncidentsByONG()
+        }
+      })
+    }
+  }
 
   render() {
     // definition of the data and operations that the entire application will have access
     const value = {
       state: { ...this.state },
       action: {
-        test: this.test,
         login: this.login,
         register: this.register,
-        addIncident: this.addIncident
+        logout: this.logout,
+        addIncident: this.addIncident,
+        deleteIncident: this.deleteIncident,
+        getIncidentsByONG: this.getIncidentsByONG,
       },
     };
 

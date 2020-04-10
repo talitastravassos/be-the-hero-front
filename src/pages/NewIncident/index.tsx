@@ -20,7 +20,7 @@ export default function NewIncident() {
 
     addIncident(incident).then((res) => {
       if (res === undefined) {
-        history.push('/profile');
+        history.push('/');
       }
     });
   };
@@ -46,7 +46,7 @@ export default function NewIncident() {
             isso.
 					</p>
 
-          <Link className='back-link' to='/profile'>
+          <Link className='back-link' to='/'>
             <FiArrowLeft size={16} color='#E02041' />
 						Voltar para home
 					</Link>
