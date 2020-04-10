@@ -1,40 +1,38 @@
-import axios from 'axios';
-import React, { FormEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useCallback, useState } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
 import { Link, useHistory } from 'react-router-dom';
 import logoImg from '../../assets/logo.svg';
+import { Incident, initialIncident } from '../../Context/ongs.types';
+import { OngsContext } from '../../Context/OngsContext';
 import './styles.scss';
 
 export default function NewIncident() {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [value, setValue] = useState('');
+  const {
+    action: { addIncident },
+  } = React.useContext(OngsContext);
+
+  const [incident, setIncident] = useState<Incident>(initialIncident);
 
   const history = useHistory();
-
-  const ongId = localStorage.getItem('ongId');
 
   const handleNewIncident = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const data = {
-      title,
-      description,
-      value,
-    };
-
-    try {
-      await axios.post('http://localhost:4000/incidents', data, {
-        headers: {
-          Authorization: ongId,
-        },
-      });
-
-      history.push('/profile');
-    } catch (error) {
-      alert('Erro ao cadastrar caso, tente novamente.');
-    }
+    addIncident(incident).then((res) => {
+      if (res === undefined) {
+        history.push('/profile');
+      }
+    });
   };
+
+  const handleChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const { value, name } = event.target;
+
+      setIncident((prevState) => ({ ...prevState, [name]: value }));
+    },
+    []
+  );
 
   return (
     <div className='new-incident-container'>
@@ -56,18 +54,21 @@ export default function NewIncident() {
 
         <form onSubmit={handleNewIncident}>
           <input
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            value={incident.title}
+            name='title'
+            onChange={handleChange}
             placeholder='Título do caso'
           />
           <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            value={incident.description}
+            name='description'
+            onChange={handleChange}
             placeholder='Descrição'
           />
           <input
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
+            value={incident.value}
+            name='value'
+            onChange={handleChange}
             placeholder='Valor em reais'
           />
 

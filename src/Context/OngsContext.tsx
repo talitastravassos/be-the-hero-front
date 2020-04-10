@@ -15,6 +15,7 @@ interface IContext {
     test(): void;
     login(id: string): Promise<any>;
     register(data: Ong): Promise<any>;
+    addIncident(incident: Incident): Promise<any>;
   };
 }
 
@@ -63,7 +64,21 @@ export default class OngsProvider extends React.Component<{}, State> {
       alert('Erro no cadastro, tente novamente');
       return error
     }
+  }
 
+  addIncident = async (incident: Incident): Promise<void> => {
+    const ongId = localStorage.getItem('ongId');
+
+    try {
+      await axios.post('http://localhost:4000/incidents', incident, {
+        headers: {
+          Authorization: ongId,
+        },
+      });
+    } catch (error) {
+      alert('Erro ao cadastrar caso, tente novamente.');
+      return error
+    }
   }
 
   componentDidMount() { }
@@ -75,7 +90,8 @@ export default class OngsProvider extends React.Component<{}, State> {
       action: {
         test: this.test,
         login: this.login,
-        register: this.register
+        register: this.register,
+        addIncident: this.addIncident
       },
     };
 
