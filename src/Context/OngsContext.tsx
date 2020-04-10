@@ -14,6 +14,7 @@ interface IContext {
   action: {
     test(): void;
     login(id: string): Promise<any>;
+    register(data: Ong): Promise<any>;
   };
 }
 
@@ -51,6 +52,20 @@ export default class OngsProvider extends React.Component<{}, State> {
     }
   };
 
+  register = async (data: Ong): Promise<void> => {
+    try {
+      const response = await axios.post('http://localhost:4000/ongs', data);
+
+      alert(`Seu ID de acesso: ${response.data.id}`);
+
+      // history.push('/');
+    } catch (error) {
+      alert('Erro no cadastro, tente novamente');
+      return error
+    }
+
+  }
+
   componentDidMount() { }
 
   render() {
@@ -59,7 +74,8 @@ export default class OngsProvider extends React.Component<{}, State> {
       state: { ...this.state },
       action: {
         test: this.test,
-        login: this.login
+        login: this.login,
+        register: this.register
       },
     };
 

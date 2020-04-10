@@ -15,10 +15,6 @@ export default function Login() {
   const [id, setId] = useState('');
   const history = useHistory();
 
-  // React.useEffect(() => {
-  //   test()
-  // }, [])
-
   const handleLogin = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 

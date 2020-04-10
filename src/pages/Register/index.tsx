@@ -1,40 +1,42 @@
-import axios from 'axios';
-import React, { FormEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useCallback, useState } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
 import { Link, useHistory } from 'react-router-dom';
 import logoImg from '../../assets/logo.svg';
+import { initialOng, Ong } from '../../Context/ongs.types';
+import { OngsContext } from '../../Context/OngsContext';
 import './styles.scss';
 
 export default function Register() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [whatsapp, setWhatsapp] = useState('');
-  const [city, setCity] = useState('');
-  const [uf, setUf] = useState('');
+  const [data, setData] = useState<Ong>(initialOng);
+
+  const {
+    action: { register },
+  } = React.useContext(OngsContext);
 
   const history = useHistory();
 
   const handleRegister = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const data = {
-      name,
-      email,
-      whatsapp,
-      city,
-      uf,
-    };
-
-    try {
-      const response = await axios.post('http://localhost:4000/ongs', data);
-
-      alert(`Seu ID de acesso: ${response.data.id}`);
-
-      history.push('/');
-    } catch (error) {
-      alert('Erro no cadastro, tente novamente');
-    }
+    register(data).then((res) => {
+      if (res === undefined) {
+        history.push('/');
+      }
+    });
   };
+
+  const handleChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const { value, name } = event.target;
+
+      setData((prevState) => ({ ...prevState, [name]: value }));
+    },
+    []
+  );
+
+  React.useEffect(() => {
+    // console.log(data)
+  }, [data])
 
   return (
     <div className='register-container'>
@@ -57,31 +59,36 @@ export default function Register() {
         <form onSubmit={handleRegister}>
           <input
             placeholder='Nome da ONG'
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            name='name'
+            value={data.name}
+            onChange={handleChange}
           />
           <input
             type='email'
             placeholder='E-mail'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            name='email'
+            value={data.email}
+            onChange={handleChange}
           />
           <input
             placeholder='Whatsapp'
-            value={whatsapp}
-            onChange={(e) => setWhatsapp(e.target.value)}
+            name='whatsapp'
+            value={data.whatsapp}
+            onChange={handleChange}
           />
           <div className='input-group'>
             <input
               placeholder='Cidade'
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
+              name='city'
+              value={data.city}
+              onChange={handleChange}
             />
             <input
               placeholder='UF'
               style={{ width: 80 }}
-              value={uf}
-              onChange={(e) => setUf(e.target.value)}
+              name='uf'
+              value={data.uf}
+              onChange={handleChange}
             />
           </div>
 
