@@ -3,7 +3,7 @@ import { FiLogIn } from 'react-icons/fi';
 import { Link, useHistory } from 'react-router-dom';
 import heroesImg from '../../assets/heroes.png';
 import logo from '../../assets/logo.svg';
-import { OngsContext } from '../../Context/OngsContext';
+import { OngsContext } from '../../context/OngsContext';
 import './styles.scss';
 
 export default function Login() {

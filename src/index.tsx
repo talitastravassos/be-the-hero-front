@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import OngsProvider from './Context/OngsContext';
+import OngsProvider from './context/OngsContext';
 import './index.scss';
 import * as serviceWorker from './serviceWorker';
 

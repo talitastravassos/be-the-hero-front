@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { FiPower, FiTrash2 } from 'react-icons/fi';
 import { Link, useHistory } from 'react-router-dom';
 import logoImg from '../../assets/logo.svg';
-import { Incident } from '../../Context/ongs.types';
-import { OngsContext } from '../../Context/OngsContext';
+import { Incident } from '../../context/ongs.types';
+import { OngsContext } from '../../context/OngsContext';
 import './styles.scss';
 
 export default function Profile() {

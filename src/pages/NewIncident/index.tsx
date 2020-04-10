@@ -2,8 +2,8 @@ import React, { ChangeEvent, FormEvent, useCallback, useState } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
 import { Link, useHistory } from 'react-router-dom';
 import logoImg from '../../assets/logo.svg';
-import { Incident, initialIncident } from '../../Context/ongs.types';
-import { OngsContext } from '../../Context/OngsContext';
+import { Incident, initialIncident } from '../../context/ongs.types';
+import { OngsContext } from '../../context/OngsContext';
 import './styles.scss';
 
 export default function NewIncident() {
