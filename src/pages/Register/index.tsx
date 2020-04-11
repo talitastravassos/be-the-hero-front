@@ -1,6 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { FiArrowLeft } from 'react-icons/fi';
+import { IMaskInput } from 'react-imask';
 import { Link, useHistory } from 'react-router-dom';
 import logoImg from '../../assets/logo.svg';
 import { Ong } from '../../context/ongs.types';
@@ -52,18 +53,30 @@ export default function Register() {
             {errors.name && 'O nome da ONG é obrigatório.'}
           </p>
           <input
-            type='email'
+            type='text'
             placeholder='E-mail'
             name='email'
-            ref={register({ required: true })}
+            ref={register({
+              required: 'Por favor, informe um endereço de email',
+              pattern: {
+                value: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                message: 'Email inválido',
+              },
+            })}
           />
           <p style={{ color: 'red', marginTop: '10px' }}>
             {errors.email && errors.email.message}
           </p>
-          <input placeholder='Whatsapp' name='whatsapp' ref={register} />
+          <IMaskInput
+            mask='(00) 0 0000-0000'
+            placeholder='Whatsapp'
+            name='whatsapp'
+            inputRef={register}
+          />
           <div className='input-group'>
             <input placeholder='Cidade' name='city' ref={register} />
-            <input
+            <IMaskInput
+              mask='aa'
               placeholder='UF'
               style={{ width: 80 }}
               name='uf'

@@ -1,6 +1,8 @@
+import numeral from 'numeral';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { FiArrowLeft } from 'react-icons/fi';
+import { IMaskInput } from 'react-imask';
 import { Link, useHistory } from 'react-router-dom';
 import logoImg from '../../assets/logo.svg';
 import { Incident } from '../../context/ongs.types';
@@ -16,7 +18,27 @@ export default function NewIncident() {
 
   const history = useHistory();
 
+  const configBlocks = {
+    valueInput: {
+      mask: Number,
+      radix: ",", // fractional delimiter
+      scale: 2, // digits after point, 0 for integers
+      signed: true, // disallow negative
+      thousandsSeparator: ".", // any single char
+      padFractionalZeros: true, // if true, then pads zeros at end to the length of scale
+      normalizeZeros: true, // appends or removes zeros at ends
+      value: "",
+      unmask: true // true|false|'typed'
+    }
+  };
+
+  const toNumber = (value: string): number => {
+    return numeral(value.replace(/\./g, '').replace(',', '.')).value()
+  }
+
   const handleNewIncident = (data: Incident | any) => {
+    data.value = toNumber(data.value)
+
     addIncident(data).then((res) => {
       if (res === undefined) {
         history.push('/');
@@ -59,9 +81,11 @@ export default function NewIncident() {
           <p style={{ color: 'red', marginTop: '10px' }}>
             {errors.description && 'Descreva o ocorrido'}
           </p>
-          <input
+          <IMaskInput
+            blocks={configBlocks}
+            mask="valueInput"
             name='value'
-            ref={register({ required: true })}
+            inputRef={register({ required: true })}
             placeholder='Valor em reais'
           />
           <p style={{ color: 'red', marginTop: '10px' }}>
