@@ -13,7 +13,7 @@ interface IContext {
   state: State;
   action: {
     login(id: string): Promise<any>;
-    register(data: Ong): Promise<any>;
+    registerOng(data: Ong): Promise<any>;
     logout(): void;
     addIncident(incident: Incident): Promise<any>;
     deleteIncident(id: number): Promise<void>;
@@ -51,7 +51,7 @@ export default class OngsProvider extends React.Component<{}, State> {
     }
   };
 
-  register = async (data: Ong): Promise<void> => {
+  registerOng = async (data: Ong): Promise<void> => {
     try {
       const response = await api.post('/ongs', data);
 
@@ -137,7 +137,7 @@ export default class OngsProvider extends React.Component<{}, State> {
       state: { ...this.state },
       action: {
         login: this.login,
-        register: this.register,
+        registerOng: this.registerOng,
         logout: this.logout,
         addIncident: this.addIncident,
         deleteIncident: this.deleteIncident,

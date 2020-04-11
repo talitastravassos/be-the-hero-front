@@ -1,42 +1,28 @@
-import React, { ChangeEvent, FormEvent, useCallback, useState } from 'react';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import { FiArrowLeft } from 'react-icons/fi';
 import { Link, useHistory } from 'react-router-dom';
 import logoImg from '../../assets/logo.svg';
-import { initialOng, Ong } from '../../context/ongs.types';
+import { Ong } from '../../context/ongs.types';
 import { OngsContext } from '../../context/OngsContext';
 import './styles.scss';
 
 export default function Register() {
-  const [data, setData] = useState<Ong>(initialOng);
+  const { register, handleSubmit, errors } = useForm();
 
   const {
-    action: { register },
+    action: { registerOng },
   } = React.useContext(OngsContext);
 
   const history = useHistory();
 
-  const handleRegister = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    register(data).then((res) => {
+  const handleRegister = (data: Ong | any) => {
+    registerOng(data).then((res) => {
       if (res === undefined) {
         history.push('/');
       }
     });
   };
-
-  const handleChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      const { value, name } = event.target;
-
-      setData((prevState) => ({ ...prevState, [name]: value }));
-    },
-    []
-  );
-
-  React.useEffect(() => {
-    // console.log(data)
-  }, [data])
 
   return (
     <div className='register-container'>
@@ -56,39 +42,32 @@ export default function Register() {
 					</Link>
         </section>
 
-        <form onSubmit={handleRegister}>
+        <form onSubmit={handleSubmit(handleRegister)}>
           <input
             placeholder='Nome da ONG'
             name='name'
-            value={data.name}
-            onChange={handleChange}
+            ref={register({ required: true })}
           />
+          <p style={{ color: 'red', marginTop: '10px' }}>
+            {errors.name && 'O nome da ONG é obrigatório.'}
+          </p>
           <input
             type='email'
             placeholder='E-mail'
             name='email'
-            value={data.email}
-            onChange={handleChange}
+            ref={register({ required: true })}
           />
-          <input
-            placeholder='Whatsapp'
-            name='whatsapp'
-            value={data.whatsapp}
-            onChange={handleChange}
-          />
+          <p style={{ color: 'red', marginTop: '10px' }}>
+            {errors.email && errors.email.message}
+          </p>
+          <input placeholder='Whatsapp' name='whatsapp' ref={register} />
           <div className='input-group'>
-            <input
-              placeholder='Cidade'
-              name='city'
-              value={data.city}
-              onChange={handleChange}
-            />
+            <input placeholder='Cidade' name='city' ref={register} />
             <input
               placeholder='UF'
               style={{ width: 80 }}
               name='uf'
-              value={data.uf}
-              onChange={handleChange}
+              ref={register}
             />
           </div>
 

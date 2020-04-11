@@ -1,38 +1,28 @@
-import React, { ChangeEvent, FormEvent, useCallback, useState } from 'react';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import { FiArrowLeft } from 'react-icons/fi';
 import { Link, useHistory } from 'react-router-dom';
 import logoImg from '../../assets/logo.svg';
-import { Incident, initialIncident } from '../../context/ongs.types';
+import { Incident } from '../../context/ongs.types';
 import { OngsContext } from '../../context/OngsContext';
 import './styles.scss';
 
 export default function NewIncident() {
+  const { register, handleSubmit, errors } = useForm();
+
   const {
     action: { addIncident },
   } = React.useContext(OngsContext);
 
-  const [incident, setIncident] = useState<Incident>(initialIncident);
-
   const history = useHistory();
 
-  const handleNewIncident = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    addIncident(incident).then((res) => {
+  const handleNewIncident = (data: Incident | any) => {
+    addIncident(data).then((res) => {
       if (res === undefined) {
         history.push('/');
       }
     });
   };
-
-  const handleChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      const { value, name } = event.target;
-
-      setIncident((prevState) => ({ ...prevState, [name]: value }));
-    },
-    []
-  );
 
   return (
     <div className='new-incident-container'>
@@ -52,25 +42,31 @@ export default function NewIncident() {
 					</Link>
         </section>
 
-        <form onSubmit={handleNewIncident}>
+        <form onSubmit={handleSubmit(handleNewIncident)}>
           <input
-            value={incident.title}
             name='title'
-            onChange={handleChange}
+            ref={register({ required: true })}
             placeholder='Título do caso'
           />
+          <p style={{ color: 'red', marginTop: '10px' }}>
+            {errors.title && 'Por favor insira um titulo ao caso.'}
+          </p>
           <textarea
-            value={incident.description}
             name='description'
-            onChange={handleChange}
+            ref={register({ required: true })}
             placeholder='Descrição'
           />
+          <p style={{ color: 'red', marginTop: '10px' }}>
+            {errors.description && 'Descreva o ocorrido'}
+          </p>
           <input
-            value={incident.value}
             name='value'
-            onChange={handleChange}
+            ref={register({ required: true })}
             placeholder='Valor em reais'
           />
+          <p style={{ color: 'red', marginTop: '10px' }}>
+            {errors.value && 'Registre um valor em reais.'}
+          </p>
 
           <button className='button' type='submit'>
             Cadastrar
