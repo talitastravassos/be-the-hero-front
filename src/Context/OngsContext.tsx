@@ -1,5 +1,6 @@
 import React from 'react';
 import { api } from '../services/api';
+import { getOngID, removeOngID, setOngID } from "../services/localStorage";
 import { errorNotification, successNotification } from '../services/notifications';
 import { Incident, initialIncident, initialOng, Ong } from './ongs.types';
 
@@ -43,9 +44,9 @@ export default class OngsProvider extends React.Component<{}, State> {
       this.setState({
         currentOng: response.data,
       });
-      localStorage.setItem('ongId', id);
+      setOngID(id)
 
-      successNotification(`Bem-vNotierrorNotificationinda, ${this.state.currentOng.name}`);
+      successNotification(`Bem-vinda, ${this.state.currentOng.name}`);
     } catch (error) {
       errorNotification('Falha no login, tente novamente');
       return error;
@@ -56,7 +57,7 @@ export default class OngsProvider extends React.Component<{}, State> {
     try {
       const response = await api.post('/ongs', data);
 
-      successNotification(`Seu INotierrorNotificationD de acesso: ${response.data.id}`);
+      successNotification(`Seu ID de acesso: ${response.data.id}`);
     } catch (error) {
       errorNotification('Erro no cadastro, tente novamente');
       return error;
@@ -64,7 +65,7 @@ export default class OngsProvider extends React.Component<{}, State> {
   };
 
   logout = () => {
-    localStorage.removeItem('ongId');
+    removeOngID()
     this.setState(
       {
         currentOng: initialOng,
@@ -72,7 +73,7 @@ export default class OngsProvider extends React.Component<{}, State> {
       () => console.log(this.state.currentOng)
     );
 
-    successNotification("AdeusNotierrorNotification :(")
+    successNotification("Adeus :(")
   };
 
   addIncident = async (incident: Incident): Promise<void> => {
@@ -84,7 +85,7 @@ export default class OngsProvider extends React.Component<{}, State> {
           Authorization: id,
         },
       });
-      successNotification('Caso NotierrorNotificationcadastrado com sucesso!');
+      successNotification('Caso cadastrado com sucesso!');
     } catch (error) {
       errorNotification('Erro ao cadastrar caso, tente novamente.');
       return error;
@@ -100,7 +101,7 @@ export default class OngsProvider extends React.Component<{}, State> {
           Authorization: id,
         },
       });
-      successNotification('Caso NotierrorNotificationdeletado com sucesso!');
+      successNotification('Caso deletado com sucesso!');
     } catch (error) {
       errorNotification('Erro ao deletar caso, tente novamente.');
       return error;
@@ -125,7 +126,7 @@ export default class OngsProvider extends React.Component<{}, State> {
   };
 
   componentDidMount() {
-    const loggedIn = localStorage.getItem('ongId');
+    const loggedIn = getOngID()
 
     if (loggedIn) {
       this.login(loggedIn).then((res) => {

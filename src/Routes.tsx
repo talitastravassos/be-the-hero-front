@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import NewIncident from './pages/NewIncident';
 import Profile from './pages/Profile';
 import Register from './pages/Register';
+import { getOngID } from './services/localStorage';
 
 interface Props {
   component: React.ComponentType<RouteProps>;
@@ -12,7 +13,7 @@ interface Props {
 };
 
 const ProtectedRoute = ({ component: Component, ...rest }: Props) => {
-  const loggedIn = localStorage.getItem('ongId');
+  const loggedIn = getOngID();
   return (
     <Route
       {...rest}

@@ -1,4 +1,3 @@
-import numeral from 'numeral';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { FiArrowLeft } from 'react-icons/fi';
@@ -7,6 +6,7 @@ import { Link, useHistory } from 'react-router-dom';
 import logoImg from '../../assets/logo.svg';
 import { Incident } from '../../context/ongs.types';
 import { OngsContext } from '../../context/OngsContext';
+import { toNumber } from "../../services/helpers";
 import './styles.scss';
 
 export default function NewIncident() {
@@ -31,10 +31,6 @@ export default function NewIncident() {
       unmask: true // true|false|'typed'
     }
   };
-
-  const toNumber = (value: string): number => {
-    return numeral(value.replace(/\./g, '').replace(',', '.')).value()
-  }
 
   const handleNewIncident = (data: Incident | any) => {
     data.value = toNumber(data.value)
