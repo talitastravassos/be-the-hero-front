@@ -14,12 +14,12 @@ Projeto da Semana OmniStack 11 com algumas adaptações nas tecnologias utilizad
 - SCSS
 
 ## Melhorias implementadas
-* [ ] Controle de estado com Context API
-* [ ] Controle de acesso atraves de rotas protegidas
-* [ ] Notificações com o SweetAlert2
-* [ ] Tipagem com o Typescript
-* [ ] Uso de SCSS na estilização dos componentes e páginas
-* [ ] Validação dos formularios com React Hook Form e React iMask
+- [x] Controle de estado com Context API
+- [x] Controle de acesso atraves de rotas protegidas
+- [x] Notificações com o SweetAlert2
+- [x] Tipagem com o Typescript
+- [x] Uso de SCSS na estilização dos componentes e páginas
+- [x] Validação dos formularios com React Hook Form e React iMask
 
 ## Futuras melhorias
 - [ ] Paginação na lista de casos
