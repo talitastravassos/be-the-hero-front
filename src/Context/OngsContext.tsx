@@ -1,5 +1,6 @@
 import React from 'react';
 import { api } from '../services/api';
+import { errorNotification, successNotification } from '../services/notifications';
 import { Incident, initialIncident, initialOng, Ong } from './ongs.types';
 
 // global application state definition
@@ -39,14 +40,14 @@ export default class OngsProvider extends React.Component<{}, State> {
       });
 
       console.log(response);
-
       this.setState({
         currentOng: response.data,
       });
-
       localStorage.setItem('ongId', id);
+
+      successNotification(`Bem-vNotierrorNotificationinda, ${this.state.currentOng.name}`);
     } catch (error) {
-      alert('Falha no login, tente novamente');
+      errorNotification('Falha no login, tente novamente');
       return error;
     }
   };
@@ -55,9 +56,9 @@ export default class OngsProvider extends React.Component<{}, State> {
     try {
       const response = await api.post('/ongs', data);
 
-      alert(`Seu ID de acesso: ${response.data.id}`);
+      successNotification(`Seu INotierrorNotificationD de acesso: ${response.data.id}`);
     } catch (error) {
-      alert('Erro no cadastro, tente novamente');
+      errorNotification('Erro no cadastro, tente novamente');
       return error;
     }
   };
@@ -70,6 +71,8 @@ export default class OngsProvider extends React.Component<{}, State> {
       },
       () => console.log(this.state.currentOng)
     );
+
+    successNotification("AdeusNotierrorNotification :(")
   };
 
   addIncident = async (incident: Incident): Promise<void> => {
@@ -81,8 +84,9 @@ export default class OngsProvider extends React.Component<{}, State> {
           Authorization: id,
         },
       });
+      successNotification('Caso NotierrorNotificationcadastrado com sucesso!');
     } catch (error) {
-      alert('Erro ao cadastrar caso, tente novamente.');
+      errorNotification('Erro ao cadastrar caso, tente novamente.');
       return error;
     }
   };
@@ -96,8 +100,9 @@ export default class OngsProvider extends React.Component<{}, State> {
           Authorization: id,
         },
       });
+      successNotification('Caso NotierrorNotificationdeletado com sucesso!');
     } catch (error) {
-      alert('Erro ao deletar caso, tente novamente');
+      errorNotification('Erro ao deletar caso, tente novamente.');
       return error;
     }
   };
